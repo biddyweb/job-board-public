@@ -1,0 +1,62 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="description" content="Job Board for MVD JS Group")
+    meta(name="author" content="Gabriel Chertok")
+
+    title MVD JS Group Job Board
+    link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+    link(href="assets/stylesheets/main.css" rel="stylesheet")
+
+    //if lt IE 9
+      script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
+      script(src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js")
+
+  body
+
+    .navbar.navbar-default.navbar-fixed-top(role="navigation")
+      .container
+        .row
+          .col-md-8.col-md-offset-2
+            a.navbar-brand(href="/#/") MVD JS Group Job Board
+
+    .container(data-bind="css: { loading: isLoading() }")
+      .row(data-bind="template: { name: currentView() }")
+
+      script(type="text/html" id="jobs")
+
+        .col-md-8.col-md-offset-2
+          .jobs.list-group(data-bind="foreach: jobs")
+            a.job.list-group-item(data-bind="attr: { href: $parent.getURL(_id) }")
+              h4.list-group-item-heading
+                span(data-bind="text: title")
+                |&nbsp;
+                small(data-bind="text: $parent.timeAgo($data.updatedAt), attr: { title: 'Last update of this posting was on: ' + $parent.parseDate($data.updatedAt) }")
+              .ellipsify
+                .pre-dots
+                .dots &hellip;
+                p.description.list-group-item-text(data-bind="text: body")
+
+      script(type="text/html" id="job")
+
+        .row
+          .col-md-8.col-md-offset-2
+            ol.breadcrumb
+              li
+                i.glyphicon.glyphicon-chevron-left
+                |&nbsp;
+                a(href="/#/jobs") To job List
+
+        .row(data-bind="with: job")
+          .col-md-6.col-md-offset-2
+            section
+              h1(data-bind="text: title")
+              div(data-bind="html: $parent.makeHtml(body)")
+          .col-md-2
+            h3(data-bind="text: user.companyName")
+            p(data-bind="html: $parent.makeHtml(user.companyBio)")
+
+    script(src="assets/scripts/main.js")
